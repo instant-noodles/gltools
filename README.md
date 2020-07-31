@@ -6,6 +6,8 @@ A set of two command line file converter tools for the [Griftlands](https://stor
 
 Both tools require [Python 3.8 (or higher)](https://www.python.org/downloads/) with the [Pillow](https://python-pillow.org/) fork of the Python Imaging Library.
 
+For the General and Full Usage sections below, change `python` to the appropriate command for your OS - Windows: `py`, Linux: `python3`, Mac: `python`.
+
 ## Griftlands Tex to PNG Converter (glt2p.py)
 
 This tool converts Griftlands .tex files to .png files.
