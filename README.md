@@ -29,7 +29,7 @@ To convert all `*.tex` files located in a directory named `folder` to `*.png` fi
     -ver, --version
         Displays version information and exits
 
-## Griftlands Bin to SCML Converter (glb2s.py)
+## Griftlands Bin Files to SCML Converter (glb2s.py)
 
 This tool converts Griftlands anim.bin, atlas0.tex, and build.bin files to a [BrashMonkey Spriter](https://brashmonkey.com/spriter-pro/) (.scml) file.
 
