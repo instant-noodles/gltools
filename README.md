@@ -1,6 +1,6 @@
-# Griftlands Tools
+# Griftlands File Converter Tools
 
-A set of two command line converter tools for the [Griftlands](https://store.steampowered.com/app/601840/Griftlands/) video game created by [Klei Entertainment](https://klei.com/).
+A set of two command line file converter tools for the [Griftlands](https://store.steampowered.com/app/601840/Griftlands/) video game created by [Klei Entertainment](https://klei.com/).
 
 ## Requirements
 
