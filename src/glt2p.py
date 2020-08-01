@@ -5,7 +5,7 @@ from pathlib import Path
 
 if __name__=="__main__":
     parser=argparse.ArgumentParser(description="Griftlands Tex to PNG Converter (by Instant-Noodles)")
-    parser.add_argument("-ver", "--version", action="version", version="%(prog)s 1.0")
+    parser.add_argument("-ver", "--version", action="version", version="%(prog)s 1.1")
     parser.add_argument("input", help="file/folder containing Griftlands .tex files")
     args=parser.parse_args()
     uInput=args.input

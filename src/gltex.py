@@ -8,15 +8,14 @@ from PIL import Image
 
 def readMagic(file):
     with open(file, "rb") as infile:
-        header=infile.read(4)
+        magic=infile.read(4)
         infile.close()
         
-    return header
+    return magic
 
 def tex2png(file):
     filename=file.name
     outfile=filename.replace(".tex", ".png")
-
     print(f"-- Converting {filename}...")
 
     try:
@@ -42,7 +41,6 @@ def tex2png(file):
 def plax2png(file):
     filename=file.name
     outfile=filename.replace(".tex", ".png")
-    
     print(f"-- Converting {filename}...")
 
     try:

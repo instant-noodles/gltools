@@ -7,8 +7,8 @@ class GLReaderEOF(Exception):
         return "Insufficient bytes to read"
 
 class GLReader:
-    def __init__(self, fileName):
-        self.file=open(fileName, "rb")
+    def __init__(self, fname):
+        self.file=open(fname, "rb")
 
     def close(self):
         self.file.close()
@@ -30,8 +30,8 @@ class GLReader:
 
         return struct.unpack(fmt, val)[0]
 
-    def seek(self, position):
-        self.file.seek(position)
+    def seek(self, pos):
+        self.file.seek(pos)
 
     def Byte(self):
         return self.read("B")

@@ -24,7 +24,6 @@ def animRead(file):
         for num in range(anim.num_anims):
             anm=animation()
             fill(anm, 5, reader)
-            
             isFirst=True
             last={"angle": 0, "scale_x": 0, "scale_y": 0}
 
@@ -151,14 +150,19 @@ def scmlMake(aData, bData, path):
     try:
         aRefs=aData["refs"]
         bRefs=bData["refs"]
+        aKeys=[]
+        eKeys=[]
+        seKeys=[]
         folLookup={}
+        seLookup={}
+        tlLookup={}
+        tlKeys={}
         scml=ET.Element("spriter_data", scml_version="1.0", generator="BrashMonkey Spriter", generator_version="r11")
 
         for idx, sym in enumerate(bData["symbols"]):
             sym_ref=sym["ref1"]
             sym_name=bRefs[sym_ref] if isinstance(sym_ref, int) else bRefs[str(sym_ref)]
             fol_name=sym_name
-
             folder=ET.SubElement(scml, "folder", id=str(idx), name=fol_name)
 
             for frm in sym["frames"]:
@@ -169,14 +173,58 @@ def scmlMake(aData, bData, path):
                 folLookup[sym_name]=[fol_name, idx]
                 file=ET.SubElement(folder, "file", id=str(frm["ndx"]), name=fname, width=str(frm["w"]), height=str(frm["h"]), pivot_x=str(frm["piv_x"]), pivot_y=str(frm["piv_y"]))
 
+        for anm in aData["anims"]:
+            aKeys.append(anm["name"] if anm["name"]==anm["name2"] else anm["name"]+"-"+anm["name2"])
+
+        for idx, anm in enumerate(aData["anims"]):
+            name=anm["name"] if anm["name"]==anm["name2"] else anm["name"]+"-"+anm["name2"]
+            duration=int(anm["framerate"]*(anm["num_frames"]))
+            seLookup[name]=[aKeys.index(name), duration]
+            eList_anm=[]
+            tlFrames={}
+            
+            for idx2, frm in enumerate(anm["frames"]):
+                eList=[]
+                tlList={}
+                
+                for ele in frm["elements"]:
+                    ele_ref=ele["ref"]
+                    ele_name=aRefs[ele_ref] if isinstance(ele_ref, int) else aRefs[str(ele_ref)]
+                    tlName=ele_name+"_"+str(int(ele["index"]))
+
+                    if ele_name in aKeys and ele_name not in seKeys:
+                        seKeys.append(ele_name)
+
+                    if ele_name in folLookup or ele_name in seKeys:
+                        for idx3 in range(10):
+                            eRef=ele_name+"-"+str(idx3)
+                            
+                            if not eRef in eList:
+                                eList.append(eRef)
+                                break
+                        
+                        if ele_name not in eKeys:
+                            eKeys.append(ele_name)
+
+                        if tlName not in tlKeys:
+                            tlList[tlName]=eRef
+
+                tlFrames[idx2]=tlList
+
+                for ele in eList:
+                    if ele not in eList_anm:
+                        eList_anm.append(ele)
+
+            tlLookup[name]=tlFrames
+            tlKeys[name]=eList_anm
+
         root_name=bData["root"]
         entity=ET.SubElement(scml, "entity", id="0", name=root_name)
 
         for idx, anm in enumerate(aData["anims"]):
             name=anm["name"] if anm["name"]==anm["name2"] else anm["name"]+"-"+anm["name2"]
             rate=anm["framerate"]
-            num_frames=anm["num_frames"]
-            duration=int(rate*num_frames)
+            duration=int(rate*anm["num_frames"])
             eleDic={}
             animation=ET.SubElement(entity, "animation", id=str(idx), name=name, length=str(duration), interval="100")
             mainline=ET.SubElement(animation, "mainline")
@@ -194,14 +242,27 @@ def scmlMake(aData, bData, path):
                     ele_name=aRefs[ele_ref] if isinstance(ele_ref, int) else aRefs[str(ele_ref)]
                     file=ele["ndx"]
 
-                    if ele_name not in folLookup:
+                    tlName=ele_name+"_"+str(int(ele["index"]))
+                    
+                    if tlName not in tlLookup[name][idx2]:
+                        continue
+                    
+                    tlRef=tlLookup[name][idx2][tlName]
+                    tl=tlKeys[name].index(tlRef)
+
+                    if ele_name not in folLookup and ele_name not in seLookup:
                         folder=None
                         foldername=None
                     else:
-                        object_ref=ET.SubElement(key, "object_ref", id=str(idx3), timeline=str(idx3), key=str(idx2), z_index=str(num_elements-idx3))
-                        lookup=folLookup[ele_name]
-                        folder=lookup[1]
-                        foldername=lookup[0]
+                        object_ref=ET.SubElement(key, "object_ref", id=str(idx3), timeline=str(tl), key=str(idx2), z_index=str(num_elements-idx3))
+
+                        if ele_name in seLookup:
+                            folder=-1
+                            foldername=-1
+                        else:
+                            lookup=folLookup[ele_name]
+                            folder=lookup[1]
+                            foldername=lookup[0]
 
                     x=str(ele["x"])
                     y=str(ele["y"])
@@ -210,15 +271,22 @@ def scmlMake(aData, bData, path):
                     angle=str(ele["angle"])
                     spin=str(ele["spin"])
 
-                    if idx3 not in eleDic:
-                        eleDic[idx3]={}
+                    if tl not in eleDic:
+                        eleDic[tl]={}
 
-                    eleDic[idx3][idx2]={"name": ele_name, "cur_time": cur_time, "file": file, "folder": folder, "x": x, "y": y, "scale_x": scale_x, "scale_y": scale_y, "angle": angle, "spin": spin}
+                    eleDic[tl]["name"]=tlRef
+                    eleDic[tl]["eName"]=ele_name
+                    eleDic[tl][idx2]={"cur_time": cur_time, "file": file, "folder": folder, "x": x, "y": y, "scale_x": scale_x, "scale_y": scale_y, "angle": angle, "spin": spin}
 
             for num in eleDic:
-                timeline=ET.SubElement(animation, "timeline", id=str(num), name="z_"+str(num))
+                ele_name=eleDic[num]["eName"]
+                
+                if ele_name in seKeys:
+                    timeline=ET.SubElement(animation, "timeline", id=str(num), name=eleDic[num]["name"], object_type="entity")
+                else:
+                    timeline=ET.SubElement(animation, "timeline", id=str(num), name=eleDic[num]["name"])
 
-                for keyId in range(len(eleDic[num])):
+                for keyId in eleDic[num]:
                     def getValue(keyValue):
                         outValue=eleDic[num][keyId][keyValue]
 
@@ -227,11 +295,15 @@ def scmlMake(aData, bData, path):
 
                         return str(outValue)
 
-                    if (keyId not in eleDic[num]) or (getValue("folder")=="None"):
+                    if (keyId=="name") or (keyId=="eName") or (getValue("folder")=="None"):
                         continue
 
                     key=ET.SubElement(timeline, "key", id=str(keyId), time=getValue("cur_time"), spin=getValue("spin"))
-                    obj=ET.SubElement(key, "object", folder=getValue("folder"), file=getValue("file"), x=getValue("x"), y=getValue("y"), scale_x=getValue("scale_x"), scale_y=getValue("scale_y"), angle=getValue("angle"))
+
+                    if ele_name in seLookup:
+                        obj=ET.SubElement(key, "object", entity="0", animation=str(seLookup[ele_name][0]), t=str(float(int(getValue("file"))*rate/seLookup[ele_name][1])), x=getValue("x"), y=getValue("y"), scale_x=getValue("scale_x"), scale_y=getValue("scale_y"), angle=getValue("angle"))
+                    else:
+                        obj=ET.SubElement(key, "object", folder=getValue("folder"), file=getValue("file"), x=getValue("x"), y=getValue("y"), scale_x=getValue("scale_x"), scale_y=getValue("scale_y"), angle=getValue("angle"))
 
         outfile=path/(root_name+".scml")
         tree=ET.ElementTree(scml)
@@ -263,7 +335,6 @@ def splice(tData, bData, path):
                     continue
 
                 outfile=output_directory/(sym_name+"-"+str(frm["ndx"])+".png")
-
                 img_crop=img.crop((x1, y1, x2, y2))
                 img_crop.save(outfile, "PNG")
 
