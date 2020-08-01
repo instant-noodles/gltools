@@ -151,7 +151,6 @@ def scmlMake(aData, bData, path):
         aRefs=aData["refs"]
         bRefs=bData["refs"]
         aKeys=[]
-        eKeys=[]
         seKeys=[]
         folLookup={}
         seLookup={}
@@ -176,14 +175,14 @@ def scmlMake(aData, bData, path):
         for anm in aData["anims"]:
             aKeys.append(anm["name"] if anm["name"]==anm["name2"] else anm["name"]+"-"+anm["name2"])
 
-        for idx, anm in enumerate(aData["anims"]):
+        for anm in aData["anims"]:
             name=anm["name"] if anm["name"]==anm["name2"] else anm["name"]+"-"+anm["name2"]
             duration=int(anm["framerate"]*(anm["num_frames"]))
             seLookup[name]=[aKeys.index(name), duration]
             eList_anm=[]
             tlFrames={}
             
-            for idx2, frm in enumerate(anm["frames"]):
+            for idx, frm in enumerate(anm["frames"]):
                 eList=[]
                 tlList={}
                 
@@ -196,20 +195,17 @@ def scmlMake(aData, bData, path):
                         seKeys.append(ele_name)
 
                     if ele_name in folLookup or ele_name in seKeys:
-                        for idx3 in range(10):
-                            eRef=ele_name+"-"+str(idx3)
+                        for idx2 in range(10):
+                            eRef=ele_name+"-"+str(idx2)
                             
                             if not eRef in eList:
                                 eList.append(eRef)
                                 break
-                        
-                        if ele_name not in eKeys:
-                            eKeys.append(ele_name)
 
                         if tlName not in tlKeys:
                             tlList[tlName]=eRef
 
-                tlFrames[idx2]=tlList
+                tlFrames[idx]=tlList
 
                 for ele in eList:
                     if ele not in eList_anm:
