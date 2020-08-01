@@ -2,17 +2,26 @@
 
 A set of two command line file converter tools for the [Griftlands](https://store.steampowered.com/app/601840/Griftlands/) video game created by [Klei Entertainment](https://klei.com/).
 
+For the Usage and Examples sections below, change `python` to the appropriate command for your operating system - Windows: `py`, Linux: `python3`, Mac: `python`.
+
 ## Requirements
 
 Both tools require [Python 3.8 (or higher)](https://www.python.org/downloads/) with the [Pillow](https://python-pillow.org/) fork of the Python Imaging Library.
-
-For the General and Full Usage sections below, change `python` to the appropriate command for your OS - Windows: `py`, Linux: `python3`, Mac: `python`.
 
 ## Griftlands Tex to PNG Converter (glt2p.py)
 
 This tool converts Griftlands .tex files to .png files.
 
-#### General Usage:
+#### Usage:
+
+    $ python glt2p.py [-h] [-ver] <input-file/input-directory>
+    
+    -h, --help
+        Displays usage information and exits
+    -ver, --version
+        Displays version information and exits
+
+#### Examples:
 
 To convert `atlas0.tex` to `atlas0.png`:
 
@@ -22,28 +31,13 @@ To convert all `*.tex` files located in a directory named `folder` to `*.png` fi
 
     $ python glt2p.py folder
 
-#### Full Usage:
-
-    $ python glt2p.py [-h] [-ver] <input-file/input-directory>
-    
-    -h, --help
-        Displays usage information and exits
-    -ver, --version
-        Displays version information and exits
-
 ## Griftlands Bin to SCML Converter (glb2s.py)
 
 This tool converts Griftlands anim.bin, atlas0.tex, and build.bin files to a [BrashMonkey Spriter](https://brashmonkey.com/spriter-pro/) (.scml) file.
 
-As Spriter does not support free-form deformations nor does it support references between animations within a single project, the resultant Spriter file may not always have perfect animation fidelity to what's displayed within Griftlands.
+As Spriter does not support free-form deformations, the resultant Spriter file may not always have perfect animation fidelity to what's displayed within Griftlands.
 
-#### General Usage:
-
-To convert `anim.bin`, `atlas0.tex`, and `build.bin` located in a directory named `folder` to a `.scml` file and its associated images:
-
-    $ python glb2s.py folder
-    
-#### Full Usage:
+#### Usage:
 
     $ python glb2s.py [-h] [-ver] <input-directory>
     
@@ -51,6 +45,12 @@ To convert `anim.bin`, `atlas0.tex`, and `build.bin` located in a directory name
         Displays usage information and exits
     -ver, --version
         Displays version information and exits
+
+#### Example:
+
+To convert `anim.bin`, `atlas0.tex`, and `build.bin` located in a directory named `folder` to a `.scml` file and its associated images:
+
+    $ python glb2s.py folder
         
 ## Notice
 
