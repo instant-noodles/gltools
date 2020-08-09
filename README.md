@@ -54,4 +54,4 @@ To convert `anim.bin`, `atlas0.tex`, and `build.bin` located in a directory name
         
 ## Notice
 
-These tools are provided by the author "AS IS" and WITHOUT WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+These tools are provided by the author (Instant-Noodles) "AS IS" and WITHOUT WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
