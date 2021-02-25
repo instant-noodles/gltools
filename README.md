@@ -6,7 +6,8 @@ For the Usage and Examples sections below, change `python` to the appropriate co
 
 ## Requirements
 
-Both tools require [Python 3.8 (or higher)](https://www.python.org/downloads/) with the [Pillow](https://python-pillow.org/) fork of the Python Imaging Library.
+Export tools require [Python 3.8 (or higher)](https://www.python.org/downloads/) with the [Pillow](https://python-pillow.org/) fork of the Python Imaging Library.
+Import tools additionally require [imagemagick](https://imagemagick.org/script/download.php) to be installed and added to your PATH
 
 ## Griftlands Tex to PNG Converter (glt2p.py)
 
@@ -51,6 +52,28 @@ As Spriter does not support free-form deformations, the resultant Spriter file m
 To convert `anim.bin`, `atlas0.tex`, and `build.bin` located in a directory named `folder` to a `.scml` file and its associated images:
 
     $ python glb2s.py folder
+
+## Image to Griftlands Tex Converter (img2glt.py)
+
+(note that this tools requires imagemagick to be installed as described in the requirements above)
+
+This tool converts pretty much any image format (altough it should be the same size as the original texture) to a Griftlands texture.
+The input file should be placed in the directory with the original .tex file, as the latter is required for the conversion (the original file will be renamed and preserved)
+
+### Usage:
+
+    $ python img2glt.py [-h] [-ver] <input-file>
+
+     -h, --help
+        Displays usage information and exits
+    -ver, --version
+        Displays version information and exits
+
+### Example:
+
+To convert `atlas0.png` back to `atlas0.tex` (which requires the original `atlas0.tex` to be present in the same directory):
+
+    $ python img2glt.py atlas0.png
         
 ## Notice
 
