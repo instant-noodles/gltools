@@ -25,7 +25,7 @@ def img2glt(image_file):
         os.rename(original_file.name, backup_filename)
 
     # use imagemagick to convert png to dds
-    os.system(f"magick -define dds:compression=dxt5 {image_file.name} {base_filename}.dds")
+    os.system(f"magick -define dds:compression=dxt5 {base_filename}.png {base_filename}.dds")
 
     # create final tex file by adding original klei header
     dds_file = open(base_filename + ".dds", "rb")
