@@ -9,7 +9,6 @@ from PIL import Image
 def readMagic(file):
     with open(file, "rb") as infile:
         magic=infile.read(4)
-        infile.close()
         
     return magic
 
@@ -29,7 +28,6 @@ def tex2png(file):
                 infile.seek(0)
                 data=infile.read()
 
-        infile.close()
         image=Image.open(io.BytesIO(data))
         w, h=image.size
         image.save(file.parent/outfile, "PNG")
