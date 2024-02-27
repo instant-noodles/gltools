@@ -1,4 +1,5 @@
 import io
+import os
 
 from dataclasses import fields
 from gldc import pbox
@@ -14,7 +15,7 @@ def readMagic(file):
 
 def tex2png(file):
     filename=file.name
-    outfile=filename.replace(".tex", ".png")
+    outfile=os.path.splitext(filename)[0]+".png"
     print(f"-- Converting {filename}...")
 
     try:
@@ -38,7 +39,7 @@ def tex2png(file):
 
 def plax2png(file):
     filename=file.name
-    outfile=filename.replace(".tex", ".png")
+    outfile=os.path.splitext(filename)[0]+".png"
     print(f"-- Converting {filename}...")
 
     try:
@@ -52,7 +53,7 @@ def plax2png(file):
 
         root_split=root.split("/")
         root_name_tex=root_split[len(root_split)-1]
-        root_name=root_name_tex.replace(".tex", ".png")
+        root_name=os.path.splitext(root_name_tex)[0]+".png"
         path_root=file.parent/root_name
         path_root_tex=file.parent/root_name_tex
 
