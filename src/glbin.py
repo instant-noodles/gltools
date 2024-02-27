@@ -351,7 +351,6 @@ def texRead(file):
                 infile.seek(0)
                 data=infile.read()
 
-        infile.close()
         print(f"   > Success: {file.name} is valid")
         return io.BytesIO(data)
     except:
